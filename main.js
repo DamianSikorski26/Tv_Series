@@ -11,6 +11,7 @@ async function getData(filter){
     try{
     let response = await fetch(`https://api.themoviedb.org/3/tv/${filter}?api_key=6631e5f1dc96088e0d26b86da29b5b6a`);
     let data = await response.json();
+    console.log(data);
     return data
     }
     catch(err){
@@ -30,7 +31,7 @@ async function createPoster(serie){
     }
      
     div.innerHTML = `<h4>${serie.name}</h4>
-            <img src="${img}" alt="img">
+            <div><img src="${img}" alt="img"></div>
             <div class=note >${serie.vote_average.toFixed(2)}/10</div>
             `;
     grid.append(div);
@@ -112,9 +113,7 @@ page.addEventListener("click",(e) => {
 })
 
 
-let button = document.getElementById("airing_today");
-
-button.click();
+document.getElementById("airing_today").click();
      
 
 

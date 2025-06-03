@@ -32,19 +32,19 @@ body{
         height: 100%;
         object-fit: cover;
         position: relative;
+        transition: .3s all linear;
         
     }
-    img::after{
-        content: "";
-        width: 100%;
-        height: 100%;
-        background-color: aqua;
-        position: absolute;
-        z-index: 5;
+    div:has(img){
 
+        background: #2aafc9;
+        background: linear-gradient(329deg, rgba(42, 175, 201, 1) 0%, rgba(223, 128, 255, 1) 100%);
     }
     
+    
 }
+
+       
 
 .note{
     position: absolute;
@@ -58,6 +58,9 @@ body{
 .serieContainer:hover .note{
     bottom: -6px;
     right: -45px;
+}
+.serieContainer:hover img{
+    opacity: 0.6;
 }
 
 .title{
