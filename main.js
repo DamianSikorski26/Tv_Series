@@ -40,6 +40,7 @@ async function createPoster(serie){
     div.innerHTML = `<h4>${serie.name}</h4>
             <div><img src="${img}" alt="img"></div>
             <div class=note >${serie.vote_average.toFixed(2)}/10</div>
+            <div class=favoriteButton >add to favorite</div>
             `;
     grid.append(div);
 }
@@ -54,7 +55,7 @@ Buttons.addEventListener("click",async function(e){
     e.preventDefault();
     localStorage.clear();
     if (e.target.id == "Your_favorites"){
-        
+
     }
 
     console.log(`New category : ${currentFilter != e.target.id}`);
