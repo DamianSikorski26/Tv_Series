@@ -1,17 +1,24 @@
 let Buttons = document.querySelector(".filterContainer");
 let grid = document.querySelector(".gridContainer");
 let page = document.querySelector(".SinglePageInfo");
+let pagination = document.querySelector(".pagination");
 
 
 
-
+let pageNumber = 1;
+let currentFilter;
+let maxPages;
 
 async function getData(filter){
     
     try{
-    let response = await fetch(`https://api.themoviedb.org/3/tv/${filter}?api_key=6631e5f1dc96088e0d26b86da29b5b6a`);
+    
+    let response = await fetch(`https://api.themoviedb.org/3/tv/${filter}?api_key=6631e5f1dc96088e0d26b86da29b5b6a&page=${pageNumber}`);
     let data = await response.json();
+    maxPages = data.total_pages;
+    console.log("maxPages: " + maxPages);
     console.log(data);
+
     return data
     }
     catch(err){
@@ -46,6 +53,25 @@ function getImg(img_path) {
 Buttons.addEventListener("click",async function(e){
     e.preventDefault();
     localStorage.clear();
+    if (e.target.id == "Your_favorites"){
+        
+    }
+
+    console.log(`New category : ${currentFilter != e.target.id}`);
+
+    console.log("Before Page Number :" + pageNumber)
+    if (currentFilter != e.target.id){
+        currentFilter = e.target.id;
+        pageNumber = 1;
+        console.log("currentfilter :" + currentFilter);
+        document.getElementById("Previous").disabled = true;
+        document.getElementById("Previous").classList.add("disabledButton");
+    }
+    console.log("Current Page Number :" + pageNumber);
+
+    
+
+    
     let filter = e.target.id;
     let data = await getData(filter);
     grid.innerHTML = "";
@@ -116,7 +142,36 @@ page.addEventListener("click",(e) => {
 document.getElementById("airing_today").click();
      
 
+pagination.addEventListener("click",(e) => {
+    e.preventDefault();
+    if (e.target.id == "Next"){
+       pageNumber += 1;
+    }
 
+    if (e.target.id == "Previous"){
+        pageNumber -= 1;
+    }
+
+    if (pageNumber == 1){
+        document.getElementById("Previous").disabled = true;
+        document.getElementById("Previous").classList.add("disabledButton");
+    }
+    else {
+        document.getElementById("Previous").removeAttribute("disabled");
+        document.getElementById("Previous").classList.remove("disabledButton");
+    }
+
+    if(pageNumber == maxPages){
+        document.getElementById("Next").disabled = true;
+        document.getElementById("Next").classList.add("disabledButton");
+    }
+    else {
+        document.getElementById("Next").removeAttribute("disabled");
+        document.getElementById("Next").classList.remove("disabledButton");
+    }
+
+    document.getElementById(currentFilter).click();
+})
 
 
 

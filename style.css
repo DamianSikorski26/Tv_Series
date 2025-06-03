@@ -1,5 +1,6 @@
 body{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: #e9fbff;
 }
 
 .gridContainer{
@@ -36,7 +37,7 @@ body{
         
     }
     div:has(img){
-
+        height: 100%;
         background: #2aafc9;
         background: linear-gradient(329deg, rgba(42, 175, 201, 1) 0%, rgba(223, 128, 255, 1) 100%);
     }
@@ -122,6 +123,30 @@ body{
 .Move{
         top: 50%;
     }
+
+
+
+.pagination{
+    width: 400px;
+    margin: auto;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    button{
+        padding: 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: .3s all linear;
+        border: 1px solid blueviolet;
+        background-color: rgb(255, 255, 255);
+        color: black;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+    }
+    .disabledButton{
+        color: gray;
+    }
+}
+
 
 
 
