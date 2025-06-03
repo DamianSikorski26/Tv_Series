@@ -4,19 +4,13 @@ let page = document.querySelector(".SinglePageInfo");
 
 
 
-const options = {
-  method: 'GET',
-  headers: {
-    accept: 'application/json',
-    Authorization: 'Bearer 6631e5f1dc96088e0d26b86da29b5b6a'
-  }
-};
+
 
 async function getData(filter){
     
     try{
-    let response = await fetch(`https://api.themoviedb.org/3/tv/${filter}?api_key=6631e5f1dc96088e0d26b86da29b5b6a`,options);
-    let data =response.json();
+    let response = await fetch(`https://api.themoviedb.org/3/tv/${filter}?api_key=6631e5f1dc96088e0d26b86da29b5b6a`);
+    let data = await response.json();
     return data
     }
     catch(err){
@@ -30,25 +24,22 @@ async function createPoster(serie){
     div.classList.add('serieContainer');
     div.setAttribute('id',serie.id);
 
-    let img = await getImg(serie.poster_path);
+    let img = getImg(serie.poster_path);
     if(img == undefined){
         img = 'https://motivatevalmorgan.com/wp-content/uploads/2016/06/default-movie-1-300x450.jpg';
     }
      
-    div.innerHTML = `<h2>${serie.name}</h2>
-            <img src="${img}" alt="img">`;
+    div.innerHTML = `<h4>${serie.name}</h4>
+            <img src="${img}" alt="img">
+            <div class=note >${serie.vote_average.toFixed(2)}/10</div>
+            `;
     grid.append(div);
 }
 
-async function getImg(img_path) {
-    try{
-    let response = await fetch(`https://image.tmdb.org/t/p/w500${img_path}`,options);
-    let data =response.json();
-    return data
-    }
-    catch(err){
-        console.log(err);
-    }
+function getImg(img_path) {
+    
+    return `https://image.tmdb.org/t/p/w500${img_path}?api_key=6631e5f1dc96088e0d26b86da29b5b6a`;
+ 
 }
 
 Buttons.addEventListener("click",async function(e){
@@ -56,23 +47,79 @@ Buttons.addEventListener("click",async function(e){
     localStorage.clear();
     let filter = e.target.id;
     let data = await getData(filter);
-    grid.innerHTML = "",
+    grid.innerHTML = "";
+    
+    Buttons.querySelectorAll("button").forEach((e)=>{
+        e.classList.remove("active");
+    })
+    e.target.classList.add("active");
+    
+    
     data.results.forEach((element) => {
         createPoster(element);
         storeObject(element);
+       
         
     })
+     
 
 });
 
 function storeObject(object){
-    localStorage.setItem(object.id,{
-        "img" : object.poster_path,
-        "name": object.name,
-        "overview": object.overview,
+
+    let content = JSON.stringify({
+        img : object.poster_path,
+        name: object.name,
+        overview: object.overview,
 
     })
+    localStorage.setItem(object.id,content);
 }
+
+grid.addEventListener("click",(e) => {
+    e.preventDefault();
+    if(e.target.closest(".serieContainer")){
+        let id = e.target.closest(".serieContainer").id;
+        console.log(id);
+        let dataJson = localStorage.getItem(id);
+        let data = JSON.parse(dataJson);
+        page.innerHTML = "";
+        createPage(data);
+        page.classList.add("Move");
+    
+    
+        }
+   
+})
+
+function createPage(object){
+    let div = document.createElement("div");
+    let img = document.createElement("img");
+    img.setAttribute("src",getImg(object.img));
+    div.innerHTML = `
+            <h4>${object.name}</h4>
+            <p>${object.overview}</p>
+            <span class=del>❌</span> `
+    page.append(img,div);
+}
+
+page.addEventListener("click",(e) => {
+    e.preventDefault();
+    if(e.target.classList.contains("del")){
+        
+        page.classList.remove("Move");
+    }
+})
+
+
+let button = document.getElementById("airing_today");
+
+button.click();
+     
+
+
+
+
 
 
 
