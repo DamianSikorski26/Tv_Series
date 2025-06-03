@@ -42,7 +42,7 @@ async function createPoster(serie){
 
 async function getImg(img_path) {
     try{
-    let response = await fetch(`https://image.tmdb.org/t/p/w500${img_path}?api_key=6631e5f1dc96088e0d26b86da29b5b6a`,options);
+    let response = await fetch(`https://image.tmdb.org/t/p/w500${img_path}`,options);
     let data =response.json();
     return data
     }
@@ -53,15 +53,26 @@ async function getImg(img_path) {
 
 Buttons.addEventListener("click",async function(e){
     e.preventDefault();
-
+    localStorage.clear();
     let filter = e.target.id;
     let data = await getData(filter);
     grid.innerHTML = "",
     data.results.forEach((element) => {
         createPoster(element);
+        storeObject(element);
+        
     })
 
 });
+
+function storeObject(object){
+    localStorage.setItem(object.id,{
+        "img" : object.poster_path,
+        "name": object.name,
+        "overview": object.overview,
+
+    })
+}
 
 
 
